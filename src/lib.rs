@@ -17,7 +17,7 @@ pub fn get_input_filename() -> Option<String> {
 pub fn read_input_string() -> io::Result<String> {
     match get_input_filename() {
         Some(path) => std::fs::read_to_string(path),
-        None => read_stdin_to_string()
+        None => read_stdin_to_string(),
     }
 }
 
@@ -30,7 +30,7 @@ pub fn read_stdin_to_string() -> io::Result<String> {
 pub fn read_input_lines() -> io::Result<Vec<String>> {
     match get_input_filename() {
         Some(path) => read_file_lines(&path),
-        None => read_stdin_lines()
+        None => read_stdin_lines(),
     }
 }
 
@@ -65,7 +65,7 @@ pub fn read_stdin_lines() -> io::Result<Vec<String>> {
 pub fn read_input_ints<T: Integer + FromStr>() -> io::Result<Vec<T>> {
     match get_input_filename() {
         Some(path) => read_ints_from_file(&path),
-        None => read_ints_from_stdin()
+        None => read_ints_from_stdin(),
     }
 }
 
@@ -90,7 +90,7 @@ pub fn read_ints_from_string<T: Integer + FromStr>(s: &str) -> Vec<T> {
 pub fn read_input_regex_matches(regex_pattern: &str) -> io::Result<Vec<String>> {
     match get_input_filename() {
         Some(path) => read_regex_matches_from_file(&path, regex_pattern),
-        None => read_regex_matches_from_stdin(&regex_pattern)
+        None => read_regex_matches_from_stdin(regex_pattern),
     }
 }
 
@@ -98,10 +98,7 @@ pub fn read_regex_matches_from_stdin(regex_pattern: &str) -> io::Result<Vec<Stri
     let s = read_stdin_to_string()?;
     let matches = read_regex_matches_from_string(&s, regex_pattern);
 
-    let res = matches
-        .into_iter()
-        .map(|sm| sm.to_owned())
-        .collect();
+    let res = matches.into_iter().map(|sm| sm.to_owned()).collect();
 
     Ok(res)
 }
@@ -124,13 +121,12 @@ pub fn read_regex_matches_from_string<'a>(s: &'a str, regex_pattern: &str) -> Ve
 }
 
 pub fn split_to_tuple2<'a>(s: &'a str, pattern: &str) -> Option<(&'a str, &'a str)> {
-    let parts = s.splitn(2, pattern);
-    return parts.collect_tuple();
+    s.split_once(pattern)
 }
 
 pub fn split_to_tuple3<'a>(s: &'a str, pattern: &str) -> Option<(&'a str, &'a str, &'a str)> {
     let parts = s.splitn(3, pattern);
-    return parts.collect_tuple();
+    parts.collect_tuple()
 }
 
 pub fn split_to_tuple4<'a>(
@@ -138,7 +134,7 @@ pub fn split_to_tuple4<'a>(
     pattern: &str,
 ) -> Option<(&'a str, &'a str, &'a str, &'a str)> {
     let parts = s.splitn(4, pattern);
-    return parts.collect_tuple();
+    parts.collect_tuple()
 }
 
 #[test]

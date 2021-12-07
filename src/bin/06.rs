@@ -1,13 +1,12 @@
-use std::io;
 use std::collections::VecDeque;
+use std::io;
 
-
-fn run(input: &Vec<u16>, rounds: usize) -> usize {
+fn run(input: &[u16], rounds: usize) -> usize {
     let mut fish = VecDeque::from([0; 9]);
     for x in input {
         fish[*x as usize] += 1;
     }
-    
+
     for _ in 0..rounds {
         let zeros = fish.pop_front().unwrap();
         // New eights

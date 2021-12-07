@@ -1,14 +1,17 @@
-use std::io;
 use itertools::Itertools;
+use std::io;
 
-fn part1(input: &Vec<usize>) -> usize {
-    input.iter().tuple_windows()
+fn part1(input: &[usize]) -> usize {
+    input
+        .iter()
+        .tuple_windows()
         .map(|(a, b)| (b > a) as usize)
         .sum()
 }
 
-fn part2(input: &Vec<usize>) -> usize {
-    input.iter()
+fn part2(input: &[usize]) -> usize {
+    input
+        .iter()
         .tuple_windows()
         .map(|(a, b, c)| a + b + c)
         .tuple_windows()

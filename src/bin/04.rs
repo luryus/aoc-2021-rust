@@ -1,15 +1,15 @@
-use std::io;
 use itertools::Itertools;
 use ndarray::Array2;
+use std::io;
 
-fn part1(nums: &Vec<u32>, boards: &Vec<BingoBoard>) -> usize {
-    let mut boards = boards.clone();
+fn part1(nums: &[u32], boards: &[BingoBoard]) -> usize {
+    let mut boards = boards.to_owned();
 
     for n in nums {
         for b in boards.iter_mut() {
             b.mark_num(*n);
             if b.check() {
-                return (b.unmarked_sum() * n) as usize
+                return (b.unmarked_sum() * n) as usize;
             }
         }
     }
@@ -17,16 +17,15 @@ fn part1(nums: &Vec<u32>, boards: &Vec<BingoBoard>) -> usize {
     unreachable!("No board win")
 }
 
-
-fn part2(nums: &Vec<u32>, boards: &Vec<BingoBoard>) -> usize {
-    let mut boards = boards.clone();
+fn part2(nums: &[u32], boards: &[BingoBoard]) -> usize {
+    let mut boards = boards.to_owned();
     let mut last_score = 0u32;
 
     for n in nums {
         let mut bingo_indices = vec![];
         for (i, b) in boards.iter_mut().enumerate() {
             b.mark_num(*n);
-            
+
             if b.check() {
                 bingo_indices.push(i);
             }
@@ -51,7 +50,7 @@ struct BingoBoard {
 
 impl BingoBoard {
     fn mark_num(&mut self, n: u32) {
-        let pos = self.rows.indexed_iter().filter(|(_, v)| n == **v).next();
+        let pos = self.rows.indexed_iter().find(|(_, v)| n == **v);
         if let Some((p, _)) = pos {
             self.marks[p] = true;
         }
@@ -62,12 +61,17 @@ impl BingoBoard {
         if row_res {
             return true;
         }
-        let col_res = self.marks.columns().into_iter().any(|c| c.iter().all(|x| *x));
-        return col_res;
+        let col_res = self
+            .marks
+            .columns()
+            .into_iter()
+            .any(|c| c.iter().all(|x| *x));
+        col_res
     }
 
     fn unmarked_sum(&self) -> u32 {
-        self.rows.indexed_iter()
+        self.rows
+            .indexed_iter()
             .filter(|(i, _)| !self.marks[*i])
             .map(|(_, v)| *v)
             .sum()
@@ -92,11 +96,17 @@ fn main() -> io::Result<()> {
 fn parse_bingo_boards(input: std::str::Split<&str>) -> Vec<BingoBoard> {
     input
         .map(|b| {
-            b.lines().map(|l| aoc2021::read_ints_from_string::<u32>(l)).collect_vec()
+            b.lines()
+                .map(aoc2021::read_ints_from_string::<u32>)
+                .collect_vec()
         })
         .map(|b_rows| {
             let rc = b_rows.len();
-            let b = Array2::from_shape_vec((rc, b_rows[0].len()), b_rows.into_iter().flatten().collect()).unwrap();
+            let b = Array2::from_shape_vec(
+                (rc, b_rows[0].len()),
+                b_rows.into_iter().flatten().collect(),
+            )
+            .unwrap();
             BingoBoard {
                 marks: Array2::default(b.raw_dim()),
                 rows: b,

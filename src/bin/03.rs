@@ -1,7 +1,6 @@
-use itertools::Itertools;
 use std::io;
 
-fn positional_bit_counts(input: &Vec<String>) -> Vec<i32> {
+fn positional_bit_counts(input: &[String]) -> Vec<i32> {
     input
         .iter()
         .map(|l| {
@@ -20,7 +19,7 @@ fn get_bitmask(s: usize) -> usize {
     (1 << s) - 1
 }
 
-fn part1(input: &Vec<String>) -> usize {
+fn part1(input: &[String]) -> usize {
     let counts = positional_bit_counts(input);
 
     let gamma = counts
@@ -33,10 +32,10 @@ fn part1(input: &Vec<String>) -> usize {
     gamma * epsilon
 }
 
-fn part2(input: &Vec<String>) -> usize {
+fn part2(input: &[String]) -> usize {
     let mut oxygen = None;
 
-    let mut oxygen_candidates = input.clone();
+    let mut oxygen_candidates = input.to_owned();
     for i in 0..oxygen_candidates[0].len() {
         let counts = positional_bit_counts(&oxygen_candidates);
         oxygen_candidates.retain(|x| {
@@ -54,7 +53,7 @@ fn part2(input: &Vec<String>) -> usize {
     let oxygen = oxygen.unwrap();
 
     let mut co2 = None;
-    let mut co2_candidates = input.clone();
+    let mut co2_candidates = input.to_owned();
     for i in 0..co2_candidates[0].len() {
         let counts = positional_bit_counts(&co2_candidates);
         co2_candidates.retain(|x| {
