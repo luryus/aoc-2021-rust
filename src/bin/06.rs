@@ -19,7 +19,7 @@ fn run(input: &[u16], rounds: usize) -> usize {
 }
 
 fn main() -> io::Result<()> {
-    let input = aoc2021::read_input_ints()?;
+    let input = aoc2021::read_input_ints(false)?;
 
     let p1 = run(&input, 80);
     println!("Part 1: {}", p1);

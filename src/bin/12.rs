@@ -49,7 +49,7 @@ fn parse_input<'a>(input: Vec<String>) -> (Vec<Cave>, usize, usize) {
     )
 }
 
-fn f(caves: &Vec<Cave>, path: Vec<&Cave>, end: usize) -> usize {
+fn f(caves: &[Cave], path: Vec<&Cave>, end: usize) -> usize {
     let head = *path.last().unwrap();
     if std::ptr::eq(head, &caves[end]) {
         return 1;
@@ -87,7 +87,7 @@ fn can_visit(path: &Path, idx: usize, cave: &Cave, start_pos: usize) -> (bool, b
     }
 }
 
-fn f2(caves: &Vec<Cave>, path: Path, start: usize, end: usize) -> usize {
+fn f2(caves: &[Cave], path: Path, start: usize, end: usize) -> usize {
     let head = *path.path.last().unwrap();
     if head == end {
         return 1;

@@ -62,25 +62,25 @@ pub fn read_stdin_lines() -> io::Result<Vec<String>> {
         .collect())
 }
 
-pub fn read_input_ints<T: Integer + FromStr>() -> io::Result<Vec<T>> {
+pub fn read_input_ints<T: Integer + FromStr>(signed: bool) -> io::Result<Vec<T>> {
     match get_input_filename() {
-        Some(path) => read_ints_from_file(&path),
-        None => read_ints_from_stdin(),
+        Some(path) => read_ints_from_file(&path, signed),
+        None => read_ints_from_stdin(signed),
     }
 }
 
-pub fn read_ints_from_stdin<T: Integer + FromStr>() -> io::Result<Vec<T>> {
+pub fn read_ints_from_stdin<T: Integer + FromStr>(signed: bool) -> io::Result<Vec<T>> {
     let s = read_stdin_to_string()?;
-    Ok(read_ints_from_string(&s))
+    Ok(read_ints_from_string(&s, signed))
 }
 
-pub fn read_ints_from_file<T: Integer + FromStr>(filename: &str) -> io::Result<Vec<T>> {
+pub fn read_ints_from_file<T: Integer + FromStr>(filename: &str, signed: bool) -> io::Result<Vec<T>> {
     let s = std::fs::read_to_string(filename)?;
-    Ok(read_ints_from_string(&s))
+    Ok(read_ints_from_string(&s, signed))
 }
 
-pub fn read_ints_from_string<T: Integer + FromStr>(s: &str) -> Vec<T> {
-    let re = Regex::new(r"\d+").unwrap();
+pub fn read_ints_from_string<T: Integer + FromStr>(s: &str, signed: bool) -> Vec<T> {
+    let re = Regex::new(if signed { r"-?\d+" } else { r"\d+" }).unwrap();
     re.find_iter(s)
         .map(|m| m.as_str())
         .filter_map(|m| m.parse::<T>().ok())

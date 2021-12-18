@@ -81,7 +81,7 @@ impl BingoBoard {
 fn main() -> io::Result<()> {
     let input = aoc2021::read_input_string()?;
     let mut input = input.split("\n\n");
-    let bingo_nums = aoc2021::read_ints_from_string(input.next().unwrap());
+    let bingo_nums = aoc2021::read_ints_from_string(input.next().unwrap(), false);
     let boards: Vec<BingoBoard> = parse_bingo_boards(input);
 
     let p1 = part1(&bingo_nums, &boards);
@@ -97,7 +97,7 @@ fn parse_bingo_boards(input: std::str::Split<&str>) -> Vec<BingoBoard> {
     input
         .map(|b| {
             b.lines()
-                .map(aoc2021::read_ints_from_string::<u32>)
+                .map(|l| aoc2021::read_ints_from_string::<u32>(l, false))
                 .collect_vec()
         })
         .map(|b_rows| {

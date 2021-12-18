@@ -46,7 +46,7 @@ impl Line {
 fn parse_lines(lines: &[String]) -> Vec<Line> {
     lines
         .iter()
-        .map(|l| aoc2021::read_ints_from_string(l))
+        .map(|l| aoc2021::read_ints_from_string(l, false))
         .map(|l: Vec<i16>| Line {
             start_x: l[0],
             start_y: l[1],

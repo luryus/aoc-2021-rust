@@ -1,9 +1,9 @@
 use std::io;
 use itertools::Itertools;
 
-fn part1(input: &Vec<String>) -> usize {
+fn part1(input: &[String]) -> usize {
     input.iter().map(|l| l.split_once(" | ").unwrap().1)
-        .map(|l| l.split(" "))
+        .map(|l| l.split(' '))
         .flatten()
         .filter(|x| [7,2,3,4].contains(&x.len()))
         .count()
@@ -33,14 +33,12 @@ impl SevenSegment {
             } else {
                 0
             }
+        } else if !cs.contains(self.top_right) {
+            5
+        } else if cs.contains(self.bottom_right) {
+            3
         } else {
-            if !cs.contains(self.top_right) {
-                5
-            } else if cs.contains(self.bottom_right) {
-                3
-            } else {
-                2
-            }
+            2
         }
     }
 }
@@ -50,7 +48,7 @@ fn deduce(line: Vec<&str>) -> Option<SevenSegment> {
     let (top_right, bottom_right) = one_segs.sorted_by_key(|c| line.iter().filter(|x| x.chars().contains(c)).count())
         .collect_tuple()?;
     let top = line.iter().find(|x| x.len() == 3)?
-        .chars().filter(|&c| c != top_right && c != bottom_right).next()?;
+        .chars().find(|&c| c != top_right && c != bottom_right)?;
     let four_left_segs = line.iter().find(|x| x.len() == 4)?
         .chars().filter(|&c| c != top_right && c != bottom_right);
     let (top_left, middle) = four_left_segs.sorted_by_key(|c| line.iter().filter(|x| x.chars().contains(c)).count())
@@ -70,9 +68,9 @@ fn deduce(line: Vec<&str>) -> Option<SevenSegment> {
 
 
 
-fn part2(input: &Vec<String>) -> u32 {
+fn part2(input: &[String]) -> u32 {
     input.iter().map(|l| l.split_once(" | ").unwrap())
-        .map(|(a, b)| (deduce(a.split(" ").collect()).unwrap(), b.split(" ").collect_vec()))
+        .map(|(a, b)| (deduce(a.split(' ').collect()).unwrap(), b.split(' ').collect_vec()))
         .map(|(disp, nums)| {
             disp.get_num(nums[0]) * 1000 +
             disp.get_num(nums[1]) * 100 +

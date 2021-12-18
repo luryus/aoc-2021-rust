@@ -13,7 +13,7 @@ fn adjacents(x: usize, y: usize, w: usize, h: usize) -> impl Iterator<Item = (us
         if y < h - 1 { Some((x, y + 1)) } else { None },
     ]
     .into_iter()
-    .filter_map(|c| c)
+    .flatten()
 }
 
 fn get_low_points(input: &Array2<u32>) -> impl Iterator<Item = (usize, usize)> + '_ {

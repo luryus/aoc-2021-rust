@@ -28,7 +28,7 @@ fn part2(input: &[i32]) -> i32 {
 }
 
 fn main() -> io::Result<()> {
-    let input = aoc2021::read_input_ints::<i32>()?;
+    let input = aoc2021::read_input_ints::<i32>(false)?;
 
     let p1 = part1(&input);
     println!("Part 1: {}", p1);

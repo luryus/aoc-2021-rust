@@ -20,7 +20,7 @@ fn part2(input: &[usize]) -> usize {
 }
 
 fn main() -> io::Result<()> {
-    let input = aoc2021::read_input_ints()?;
+    let input = aoc2021::read_input_ints(false)?;
 
     let p1 = part1(&input);
     println!("Part 1: {}", p1);
