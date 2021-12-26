@@ -21,14 +21,14 @@ impl PairNode {
 
     fn zero_child(&mut self, child: Rc<RefCell<PairNode>>) {
         if let SnailfishNumber::Pair(p) = &self.left {
-            if Rc::ptr_eq(&child, &p) {
+            if Rc::ptr_eq(&child, p) {
                 self.left = SnailfishNumber::Regular(0);
                 return;
             }
         }
 
         if let SnailfishNumber::Pair(p) = &self.right {
-            if Rc::ptr_eq(&child, &p) {
+            if Rc::ptr_eq(&child, p) {
                 self.right = SnailfishNumber::Regular(0);
                 return;
             }
@@ -121,7 +121,7 @@ fn explode(node_ptr: Rc<RefCell<PairNode>>, level: usize) -> bool {
                 let parent_ptr = node_ptr.borrow().parent.clone().unwrap();
                 add_to_left(parent_ptr.clone(), l, node_ptr.clone());
                 add_to_right(parent_ptr.clone(), r, node_ptr.clone());
-                parent_ptr.borrow_mut().zero_child(node_ptr.clone());
+                parent_ptr.borrow_mut().zero_child(node_ptr);
                 return true;
             }
         }
@@ -141,7 +141,7 @@ fn explode(node_ptr: Rc<RefCell<PairNode>>, level: usize) -> bool {
         }
     }
 
-    return false;
+    false
 }
 
 #[derive(Clone)]
@@ -278,7 +278,7 @@ fn part2(input: &Vec<SnailfishNumber>) -> u32 {
 fn parse_tree(l: &str, parent: Option<Rc<RefCell<PairNode>>>) -> (SnailfishNumber, usize) {
     if l.starts_with('[') {
         // parse pair
-        let tree = Rc::new(RefCell::new(PairNode::new(parent.clone())));
+        let tree = Rc::new(RefCell::new(PairNode::new(parent)));
         let (left, llen) = parse_tree(&l[1..], Some(tree.clone()));
         let (right, rlen) = parse_tree(&l[1 + llen + 1..], Some(tree.clone()));
         {

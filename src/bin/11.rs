@@ -11,8 +11,7 @@ fn adjacents(x: usize, y: usize, w: usize, h: usize) -> impl Iterator<Item = (us
 fn part1(input: &Array2<usize>) -> usize {
     let mut arr = input.clone();
     let mut total_flashes = 0;
-    for i in 0..100 {
-        // dbg!(&arr);
+    for _ in 0..100 {
         arr += 1;
         let mut flashes: Array2<bool> = Array2::default(arr.raw_dim());
 
@@ -22,14 +21,12 @@ fn part1(input: &Array2<usize>) -> usize {
                 .filter(|&(c, v)| *v > 9 && !flashes[c])
                 .map(|(c, _)| c)
                 .collect();
-            // dbg!(&new_flashes);
             if new_flashes.is_empty() {
                 break;
             }
             for c in new_flashes {
                 flashes[c] = true;
                 for (ax, ay) in adjacents(c.1, c.0, 10, 10) {
-                    // dbg!(&(ax, ay));
                     arr[(ay, ax)] += 1;
                 }
             }
@@ -47,7 +44,6 @@ fn part1(input: &Array2<usize>) -> usize {
 fn part2(input: &Array2<usize>) -> usize {
     let mut arr = input.clone();
     for i in 0.. {
-        // dbg!(&arr);
         arr += 1;
         let mut flashes: Array2<bool> = Array2::default(arr.raw_dim());
 
@@ -57,14 +53,12 @@ fn part2(input: &Array2<usize>) -> usize {
                 .filter(|&(c, v)| *v > 9 && !flashes[c])
                 .map(|(c, _)| c)
                 .collect();
-            // dbg!(&new_flashes);
             if new_flashes.is_empty() {
                 break;
             }
             for c in new_flashes {
                 flashes[c] = true;
                 for (ax, ay) in adjacents(c.1, c.0, 10, 10) {
-                    // dbg!(&(ax, ay));
                     arr[(ay, ax)] += 1;
                 }
             }

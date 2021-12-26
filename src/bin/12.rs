@@ -15,7 +15,7 @@ struct Path {
 fn parse_input<'a>(input: Vec<String>) -> (Vec<Cave>, usize, usize) {
     let all_names: Vec<_> = input
         .iter()
-        .map(|l| aoc2021::read_regex_matches_from_string(&l, r"\w+"))
+        .map(|l| aoc2021::read_regex_matches_from_string(l, r"\w+"))
         .flatten()
         .unique()
         .collect();
@@ -28,7 +28,7 @@ fn parse_input<'a>(input: Vec<String>) -> (Vec<Cave>, usize, usize) {
         .collect();
 
     for l in &input {
-        let (start, end) = aoc2021::read_regex_matches_from_string(&l, r"\w+")
+        let (start, end) = aoc2021::read_regex_matches_from_string(l, r"\w+")
             .into_iter()
             .collect_tuple()
             .unwrap();

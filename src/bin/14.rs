@@ -73,7 +73,7 @@ fn parse_input(mut input: Vec<String>) -> (String, BTreeMap<(char, char), Node>)
         .map(|l| {
             let (a, b) = l.split_once(" -> ").unwrap();
             Node {
-                left: a.chars().nth(0).unwrap(),
+                left: a.chars().next().unwrap(),
                 right: a.chars().nth(1).unwrap(),
                 mid: b.chars().next().unwrap(),
             }

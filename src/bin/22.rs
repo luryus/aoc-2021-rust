@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::io;
 
-fn part1(input: &Vec<(bool, Vec<i32>)>) -> usize {
+fn part1(input: &[(bool, Vec<i32>)]) -> usize {
     let input: Vec<_> = input
         .iter()
         .filter(|(_, cs)| cs.iter().all(|c| c.abs() <= 50))
@@ -94,7 +94,6 @@ fn split_to_parts(cube: &Cube, splitter: &Cube) -> Vec<Cube> {
     ]
     .into_iter()
     .filter(|c| c.0 <= c.1);
-    drop(cube);
 
     // Y axis
     let y_cubes = x_cubes.flat_map(|c| {
@@ -161,7 +160,7 @@ fn test_split_to_parts() {
     assert_eq!(parts.iter().map(|p| p.volume()).sum::<usize>(), 26);
 }
 
-fn run(input: &Vec<(bool, Vec<i32>)>) -> usize {
+fn run(input: &[(bool, Vec<i32>)]) -> usize {
     let mut cubes: Vec<Cube> = Vec::new();
 
     for (v, cs) in input {
@@ -181,7 +180,7 @@ fn run(input: &Vec<(bool, Vec<i32>)>) -> usize {
     cubes.iter().map(|c| c.volume()).sum()
 }
 
-fn part2(input: &Vec<(bool, Vec<i32>)>) -> usize {
+fn part2(input: &[(bool, Vec<i32>)]) -> usize {
     run(input)
 }
 

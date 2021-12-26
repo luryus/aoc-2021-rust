@@ -29,8 +29,8 @@ enum Instr {
     Eql(char, Operand),
 }
 
-fn part1(prg: &Vec<Instr>) -> usize {
-    let n = "59996912981939"
+fn part1(prg: &[Instr]) -> usize {
+    let n: Vec<i32> = "59996912981939"
         .chars()
         .map(|c| c.to_digit(10).unwrap() as i32)
         .collect();
@@ -41,8 +41,8 @@ fn part1(prg: &Vec<Instr>) -> usize {
     59996912981939
 }
 
-fn part2(prg: &Vec<Instr>) -> usize {
-    let n = "17241911811915"
+fn part2(prg: &[Instr]) -> usize {
+    let n: Vec<i32> = "17241911811915"
         .chars()
         .map(|c| c.to_digit(10).unwrap() as i32)
         .collect();
@@ -69,7 +69,7 @@ impl Registers {
         }
     }
 
-    fn get_mut<'a>(&mut self, c: char) -> &mut i32 {
+    fn get_mut(&mut self, c: char) -> &mut i32 {
         match c {
             'x' => &mut self.x,
             'z' => &mut self.z,
@@ -93,28 +93,28 @@ impl Registers {
     }
 }
 
-fn execute(prg: &Vec<Instr>, inputs: &Vec<i32>) -> i32 {
+fn execute(prg: &[Instr], inputs: &[i32]) -> i32 {
     let mut regs = Registers::new();
     let mut inp_iter = inputs.iter();
 
     for i in prg {
-        match i {
-            &Instr::Inp(v) => {
+        match *i {
+            Instr::Inp(v) => {
                 *regs.get_mut(v) = *inp_iter.next().expect("No more inputs remaining")
             }
-            &Instr::Add(v, op) => *regs.get_mut(v) += regs.op_val(op),
-            &Instr::Sub(v, op) => *regs.get_mut(v) -= regs.op_val(op),
-            &Instr::Mul(v, op) => *regs.get_mut(v) *= regs.op_val(op),
-            &Instr::Div(v, op) => *regs.get_mut(v) /= regs.op_val(op),
-            &Instr::Mod(v, op) => *regs.get_mut(v) %= regs.op_val(op),
-            &Instr::Eql(v, op) => *regs.get_mut(v) = (*regs.get_mut(v) == regs.op_val(op)) as i32,
+            Instr::Add(v, op) => *regs.get_mut(v) += regs.op_val(op),
+            Instr::Sub(v, op) => *regs.get_mut(v) -= regs.op_val(op),
+            Instr::Mul(v, op) => *regs.get_mut(v) *= regs.op_val(op),
+            Instr::Div(v, op) => *regs.get_mut(v) /= regs.op_val(op),
+            Instr::Mod(v, op) => *regs.get_mut(v) %= regs.op_val(op),
+            Instr::Eql(v, op) => *regs.get_mut(v) = (*regs.get_mut(v) == regs.op_val(op)) as i32,
         }
     }
 
     regs.z
 }
 
-fn read_program(prg: &Vec<String>) -> Vec<Instr> {
+fn read_program(prg: &[String]) -> Vec<Instr> {
     prg.iter()
         .map(|l| {
             if l.starts_with("inp") {

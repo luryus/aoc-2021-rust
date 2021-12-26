@@ -45,28 +45,19 @@ fn part1(input: &Array2<char>) -> usize {
         if to_move_down.is_empty() && to_move_right.is_empty() {
             return rounds;
         }
-        //println!("Round {}", rounds);
-        //dbg!(&arr);
     }
 
     unreachable!()
 }
 
 
-fn part2(input: &Array2<char>) -> usize {
-    0
-}
 
 fn main() -> io::Result<()> {
     let input: Vec<Vec<_>> = aoc2021::read_input_lines()?.into_iter().map(|l| l.chars().collect()).collect();
     let input = Array2::from_shape_vec((input.len(), input[0].len()), input.into_iter().flatten().collect_vec()).unwrap();
-    //dbg!(&input);
 
     let p1 = part1(&input);
     println!("Part 1: {}", p1);
-
-    let p2 = part2(&input);
-    println!("Part 2: {}", p2);
 
     Ok(())
 }

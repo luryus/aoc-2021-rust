@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::{collections::HashMap, io, ops::Add};
+use std::{collections::HashMap, io};
 
 fn part1(mut p1_pos: u32, mut p2_pos: u32) -> u32 {
     let mut p1 = 0;

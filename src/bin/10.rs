@@ -23,7 +23,7 @@ fn analyze(l: &str) -> NavRes {
     NavRes::Incomplete(stack)
 }
 
-fn part1(input: &Vec<String>) -> usize {
+fn part1(input: &[String]) -> usize {
     input
         .iter()
         .filter_map(|l| match analyze(l) {
@@ -40,7 +40,7 @@ fn part1(input: &Vec<String>) -> usize {
         .sum()
 }
 
-fn part2(input: &Vec<String>) -> usize {
+fn part2(input: &[String]) -> usize {
     let scores: Vec<_> = input
         .iter()
         .filter_map(|l| match analyze(l) {

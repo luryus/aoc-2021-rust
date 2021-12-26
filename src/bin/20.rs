@@ -1,5 +1,5 @@
-use itertools::Itertools;
-use ndarray::{array, s, stack, Array2};
+
+use ndarray::{s, Array2};
 use std::io;
 
 fn run(algo: &Vec<bool>, img: &Array2<bool>, outside: bool) -> (Array2<bool>, bool) {
@@ -46,7 +46,7 @@ fn pad<T: Default + Clone + Copy>(arr: &Array2<T>, val: T) -> Array2<T> {
     let mut padded = Array2::default((arr.nrows() + 4, arr.ncols() + 4));
     padded.fill(val);
     let mut center_view = padded.slice_mut(s![2..-2, 2..-2]);
-    center_view.assign(&arr);
+    center_view.assign(arr);
     padded
 }
 

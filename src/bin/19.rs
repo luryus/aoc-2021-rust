@@ -39,7 +39,7 @@ fn test_transformation_matrices() {
     assert_eq!(24, ts.len());
 }
 
-fn transformed_scanners(scanner: &Vec<Array1<i32>>) -> impl Iterator<Item = Vec<Array1<i32>>> + '_ {
+fn transformed_scanners(scanner: &[Array1<i32>]) -> impl Iterator<Item = Vec<Array1<i32>>> + '_ {
     transformation_matrices()
         .into_iter()
         .map(|t| scanner.iter().map(|c| c.dot(&t)).collect_vec())
@@ -146,7 +146,7 @@ fn find_translation(
     None
 }
 
-fn part1(input: &Vec<Vec<Array1<i32>>>) -> (usize, Vec<Array1<i32>>) {
+fn part1(input: &[Vec<Array1<i32>>]) -> (usize, Vec<Array1<i32>>) {
     let mut refspace: HashSet<Array1<i32>> = input[0].iter().cloned().collect();
     let mut translations = vec![array![0, 0, 0]];
 
@@ -207,7 +207,7 @@ fn get_min_max_axis(refspace: &HashSet<Array1<i32>>) -> ((i32, i32), (i32, i32),
     ((r.0, r.1), (r.2, r.3), (r.4, r.5))
 }
 
-fn part2(points: &Vec<Array1<i32>>) -> i32 {
+fn part2(points: &[Array1<i32>]) -> i32 {
     points
         .iter()
         .cartesian_product(points)

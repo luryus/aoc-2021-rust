@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use ndarray::Array2;
 use std::{
-    collections::{BTreeMap, BinaryHeap, HashMap, HashSet},
+    collections::{BTreeMap, BinaryHeap, HashSet},
     io,
 };
 
@@ -31,26 +31,6 @@ fn abs_diff(a: usize, b: usize) -> usize {
     } else {
         b - a
     }
-}
-
-fn print_state(grid: &Array2<Square>, state: &State) {
-    for (y, r) in grid.rows().into_iter().enumerate() {
-        for (x, s) in r.indexed_iter() {
-            if let Some(ap) = state.0.get(&(y, x)) {
-                print!("{}", ap);
-            } else {
-                print!(
-                    "{}",
-                    match s {
-                        Square::Wall => '#',
-                        _ => '.',
-                    }
-                );
-            }
-        }
-        println!();
-    }
-    println!();
 }
 
 fn adjacents(x: usize, y: usize, w: usize, h: usize) -> impl Iterator<Item = (usize, usize)> {
@@ -191,12 +171,9 @@ fn run(grid: &Array2<Square>, init: &State) -> usize {
         }
 
         for (&sc, &sap) in &state.0 {
-            if sc.0 >= 2 && sc.1 == amphipod_room_x_coord(sap) {
-                if (sc.0..(grid.nrows() - 1))
-                    .all(|yy| matches!(state.0.get(&(yy, sc.1)), Some(apap) if *apap == sap))
-                {
-                    continue;
-                }
+            if sc.0 >= 2 && sc.1 == amphipod_room_x_coord(sap) && (sc.0..(grid.nrows() - 1))
+                    .all(|yy| matches!(state.0.get(&(yy, sc.1)), Some(apap) if *apap == sap)) {
+                continue;
             }
             let moves = move_amphipod(sap, sc, grid, &state);
             for (dest, mcost) in moves {
@@ -226,7 +203,7 @@ fn is_final(state: &State, grid: &Array2<Square>) -> bool {
         .all(|(c, &ap)| matches!(grid[*c], Square::Room(rap) if rap == ap))
 }
 
-fn read_grid(lines: &Vec<String>) -> (Array2<Square>, State) {
+fn read_grid(lines: &[String]) -> (Array2<Square>, State) {
     let w = lines[0].len();
     let h = lines.len();
 
@@ -234,7 +211,7 @@ fn read_grid(lines: &Vec<String>) -> (Array2<Square>, State) {
 
     let mut amphipods = BTreeMap::new();
 
-    for (y, l) in lines.into_iter().enumerate() {
+    for (y, l) in lines.iter().enumerate() {
         for (x, c) in l.chars().enumerate() {
             let sq = match c {
                 '#' | ' ' => Square::Wall,

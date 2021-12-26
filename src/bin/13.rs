@@ -32,7 +32,7 @@ fn part1(paper: &Array2<bool>, folds: &Vec<(bool, usize)>) -> usize {
 
 fn part2(paper: Array2<bool>, folds: &Vec<(bool, usize)>) {
     let folded = folds
-        .into_iter()
+        .iter()
         .fold(paper, |p, &(fold_up, fold_pos)| fold(&p, fold_up, fold_pos));
 
     for r in folded.rows() {
@@ -78,7 +78,7 @@ fn parse_input(input: Vec<String>) -> (Array2<bool>, Vec<(bool, usize)>) {
 
     let folds = input
         .into_iter()
-        .skip_while(|l| !l.starts_with("f"))
+        .skip_while(|l| !l.starts_with('f'))
         .map(|l| {
             let (l, r) = l.split_once('=').unwrap();
             (l.ends_with('y'), r.parse().unwrap())
