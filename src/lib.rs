@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use ndarray::Array2;
 use num_integer::Integer;
 use regex::Regex;
 use std::io::{self, Read};
@@ -74,7 +75,10 @@ pub fn read_ints_from_stdin<T: Integer + FromStr>(signed: bool) -> io::Result<Ve
     Ok(read_ints_from_string(&s, signed))
 }
 
-pub fn read_ints_from_file<T: Integer + FromStr>(filename: &str, signed: bool) -> io::Result<Vec<T>> {
+pub fn read_ints_from_file<T: Integer + FromStr>(
+    filename: &str,
+    signed: bool,
+) -> io::Result<Vec<T>> {
     let s = std::fs::read_to_string(filename)?;
     Ok(read_ints_from_string(&s, signed))
 }
