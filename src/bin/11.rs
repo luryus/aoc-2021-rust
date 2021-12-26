@@ -1,13 +1,12 @@
-use std::io;
 use itertools::Itertools;
 use ndarray::Array2;
+use std::io;
 
 fn adjacents(x: usize, y: usize, w: usize, h: usize) -> impl Iterator<Item = (usize, usize)> {
-    (x.saturating_sub(1)..=(x+1).min(w-1))
-        .cartesian_product(y.saturating_sub(1)..=(y+1).min(h-1))
+    (x.saturating_sub(1)..=(x + 1).min(w - 1))
+        .cartesian_product(y.saturating_sub(1)..=(y + 1).min(h - 1))
         .filter(move |c| *c != (x, y))
 }
-
 
 fn part1(input: &Array2<usize>) -> usize {
     let mut arr = input.clone();
@@ -18,7 +17,8 @@ fn part1(input: &Array2<usize>) -> usize {
         let mut flashes: Array2<bool> = Array2::default(arr.raw_dim());
 
         loop {
-            let new_flashes: Vec<_> = arr.indexed_iter()
+            let new_flashes: Vec<_> = arr
+                .indexed_iter()
                 .filter(|&(c, v)| *v > 9 && !flashes[c])
                 .map(|(c, _)| c)
                 .collect();
@@ -44,7 +44,6 @@ fn part1(input: &Array2<usize>) -> usize {
     total_flashes
 }
 
-
 fn part2(input: &Array2<usize>) -> usize {
     let mut arr = input.clone();
     for i in 0.. {
@@ -53,7 +52,8 @@ fn part2(input: &Array2<usize>) -> usize {
         let mut flashes: Array2<bool> = Array2::default(arr.raw_dim());
 
         loop {
-            let new_flashes: Vec<_> = arr.indexed_iter()
+            let new_flashes: Vec<_> = arr
+                .indexed_iter()
                 .filter(|&(c, v)| *v > 9 && !flashes[c])
                 .map(|(c, _)| c)
                 .collect();
@@ -71,7 +71,7 @@ fn part2(input: &Array2<usize>) -> usize {
         }
 
         if flashes.iter().filter(|f| **f).count() == flashes.len() {
-                return i + 1
+            return i + 1;
         }
 
         for (c, _) in flashes.indexed_iter().filter(|(_, f)| **f) {

@@ -1,7 +1,5 @@
 use itertools::Itertools;
-use std::{
-    io,
-};
+use std::io;
 
 struct Cave {
     large: bool,
@@ -117,7 +115,7 @@ fn part2(input: &Vec<Cave>, start: usize, end: usize) -> usize {
             double_visit_used: false,
         },
         start,
-        end
+        end,
     )
 }
 
