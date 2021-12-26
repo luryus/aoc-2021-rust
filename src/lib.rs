@@ -143,11 +143,10 @@ pub fn split_to_tuple4<'a>(
 
 #[test]
 fn test_read_ints_from_string() {
-    let s = "a123b22 123x02\n123";
-    let res: Vec<i32> = read_ints_from_string(s);
+    let s = "a123b22 123x02\n123-22";
+    let res: Vec<i32> = read_ints_from_string(s, true);
 
-    assert_eq!(5, res.len());
-    assert_eq!(vec![123i32, 22, 123, 02, 123], res);
+    assert_eq!(vec![123i32, 22, 123, 2, 123, -22], res);
 }
 
 #[test]
