@@ -124,6 +124,24 @@ pub fn read_regex_matches_from_string<'a>(s: &'a str, regex_pattern: &str) -> Ve
     re.find_iter(s).map(|m| m.as_str()).collect()
 }
 
+pub fn read_input_char_matrix() -> io::Result<Array2<char>> {
+    let lines = read_input_lines()?;
+    let h = lines.len();
+    let w = lines[0].len();
+
+    Array2::from_shape_vec((h, w), lines.iter().flat_map(|l| l.chars()).collect())
+        .map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e))
+}
+
+pub fn read_input_int_matrix<T: Integer + From<u32>>() -> io::Result<Array2<T>> {
+    let cm = read_input_char_matrix()?;
+    if !cm.iter().all(|&c| c.is_digit(10)) {
+        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Matrix char not a digit"))
+    } else {
+        Ok(cm.map(|&c| c.to_digit(10).unwrap().into()))
+    }
+}
+
 pub fn split_to_tuple2<'a>(s: &'a str, pattern: &str) -> Option<(&'a str, &'a str)> {
     s.split_once(pattern)
 }

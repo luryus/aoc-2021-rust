@@ -2,89 +2,72 @@ use itertools::Itertools;
 use ndarray::Array2;
 use std::io;
 
-fn adjacents(x: usize, y: usize, w: usize, h: usize) -> impl Iterator<Item = (usize, usize)> {
-    (x.saturating_sub(1)..=(x + 1).min(w - 1))
-        .cartesian_product(y.saturating_sub(1)..=(y + 1).min(h - 1))
-        .filter(move |c| *c != (x, y))
+fn adjacents_with_diagonal(
+    c: (usize, usize),
+    w: usize,
+    h: usize,
+) -> impl Iterator<Item = (usize, usize)> {
+    let (y, x) = c;
+    (y.saturating_sub(1)..=(y + 1).min(h - 1))
+        .cartesian_product(x.saturating_sub(1)..=(x + 1).min(w - 1))
+        .filter(move |c| *c != (y, x))
 }
 
-fn part1(input: &Array2<usize>) -> usize {
+fn flash(arr: &mut Array2<u32>) -> Array2<bool> {
+    let mut flashes: Array2<bool> = Array2::default(arr.raw_dim());
+
+    loop {
+        let new_flashes: Vec<_> = arr
+            .indexed_iter()
+            .filter(|&(c, v)| *v > 9 && !flashes[c])
+            .map(|(c, _)| c)
+            .collect();
+        if new_flashes.is_empty() {
+            return flashes;
+        }
+        for c in new_flashes {
+            flashes[c] = true;
+            for ac in adjacents_with_diagonal(c, 10, 10) {
+                arr[ac] += 1;
+            }
+        }
+    }
+}
+
+fn part1(input: &Array2<u32>) -> usize {
     let mut arr = input.clone();
     let mut total_flashes = 0;
     for _ in 0..100 {
         arr += 1;
-        let mut flashes: Array2<bool> = Array2::default(arr.raw_dim());
 
-        loop {
-            let new_flashes: Vec<_> = arr
-                .indexed_iter()
-                .filter(|&(c, v)| *v > 9 && !flashes[c])
-                .map(|(c, _)| c)
-                .collect();
-            if new_flashes.is_empty() {
-                break;
-            }
-            for c in new_flashes {
-                flashes[c] = true;
-                for (ax, ay) in adjacents(c.1, c.0, 10, 10) {
-                    arr[(ay, ax)] += 1;
-                }
-            }
-        }
+        let flashes = flash(&mut arr);
 
-        for (c, _) in flashes.indexed_iter().filter(|(_, f)| **f) {
-            arr[c] = 0;
-            total_flashes += 1;
-        }
+        total_flashes += flashes.iter().filter(|f| **f).count();
+        arr = &arr * flashes.map(|f| !f as u32);
     }
 
     total_flashes
 }
 
-fn part2(input: &Array2<usize>) -> usize {
+fn part2(input: &Array2<u32>) -> usize {
     let mut arr = input.clone();
     for i in 0.. {
         arr += 1;
-        let mut flashes: Array2<bool> = Array2::default(arr.raw_dim());
 
-        loop {
-            let new_flashes: Vec<_> = arr
-                .indexed_iter()
-                .filter(|&(c, v)| *v > 9 && !flashes[c])
-                .map(|(c, _)| c)
-                .collect();
-            if new_flashes.is_empty() {
-                break;
-            }
-            for c in new_flashes {
-                flashes[c] = true;
-                for (ax, ay) in adjacents(c.1, c.0, 10, 10) {
-                    arr[(ay, ax)] += 1;
-                }
-            }
-        }
+        let flashes = flash(&mut arr);
 
-        if flashes.iter().filter(|f| **f).count() == flashes.len() {
+        if flashes.iter().all(|f| *f) {
             return i + 1;
         }
 
-        for (c, _) in flashes.indexed_iter().filter(|(_, f)| **f) {
-            arr[c] = 0;
-        }
+        arr = &arr * flashes.map(|f| !f as u32);
     }
 
     unreachable!()
 }
 
 fn main() -> io::Result<()> {
-    let input = aoc2021::read_input_lines()?;
-    let line_width = input[0].len();
-    let input = input
-        .iter()
-        .flat_map(|l| l.chars())
-        .map(|c: char| c.to_digit(10).unwrap() as usize)
-        .collect_vec();
-    let input = Array2::from_shape_vec((input.len() / line_width, line_width), input).unwrap();
+    let input = aoc2021::read_input_int_matrix()?;
 
     let p1 = part1(&input);
     println!("Part 1: {}", p1);

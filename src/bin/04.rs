@@ -57,24 +57,18 @@ impl BingoBoard {
     }
 
     fn check(&self) -> bool {
-        let row_res = self.marks.rows().into_iter().any(|r| r.iter().all(|x| *x));
-        if row_res {
-            return true;
-        }
-        let col_res = self
+        // Rows
+        self.marks.rows().into_iter().any(|r| r.iter().all(|x| *x)) ||
+        // Columns
+        self
             .marks
             .columns()
             .into_iter()
-            .any(|c| c.iter().all(|x| *x));
-        col_res
+            .any(|c| c.iter().all(|x| *x))
     }
 
     fn unmarked_sum(&self) -> u32 {
-        self.rows
-            .indexed_iter()
-            .filter(|(i, _)| !self.marks[*i])
-            .map(|(_, v)| *v)
-            .sum()
+        (&self.rows * self.marks.map(|&m| !m as u32)).sum()
     }
 }
 
