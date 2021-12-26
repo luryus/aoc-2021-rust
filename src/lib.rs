@@ -170,3 +170,10 @@ impl<T, I: Iterator<Item = Option<T>>> UnwrapOptionIterator<T> for I {
         self.map(|x| x.unwrap())
     }
 }
+
+pub fn make_2d_array<T>(v: Vec<Vec<T>>) -> Option<Array2<T>> {
+    let ncols = v[0].len();
+    let nrows = v.len();
+
+    Array2::from_shape_vec((ncols, nrows), v.into_iter().flatten().collect_vec()).ok()
+}
